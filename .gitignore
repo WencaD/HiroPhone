@@ -1,0 +1,28 @@
+# Visual Studio
+.vs/
+[Bb]in/
+[Oo]bj/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+*.suo
+*.user
+*.userprefs
+*.pidb
+*.ipch
+*.aps
+*.cache
+*.db
+*.opendb
+*.sdf
+*.[Ll]og
+*.tlog
+*.tlog/
+*.obj
+*.pdb
+*.suo
+*.user
+*~
+# Packages
+packages/
