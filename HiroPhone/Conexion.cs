@@ -1,34 +1,26 @@
-using System;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 
 namespace HiroPhone
 {
-    public static class DatabaseHelper
+    public class Conexion
     {
-        // Obtiene la cadena de conexión de App.config
-        private static readonly string ConnectionString = ConfigurationManager.ConnectionStrings["HiroPhoneDB"]?.ConnectionString;
-
-        // Método auxiliar para obtener una conexión abierta
-        private static SqlConnection GetConnection()
+        // Método solicitado para conectar la base de datos con el proyecto
+        public static SqlConnection Conectar()
         {
-            if (string.IsNullOrEmpty(ConnectionString))
-            {   
-                throw new InvalidOperationException("La cadena de conexión 'HiroPhoneDB' no está configurada en App.config.");
-            }
-            SqlConnection conn = new SqlConnection(ConnectionString);
-            conn.Open();
-            return conn;
+            string connectionString = ConfigurationManager.ConnectionStrings["HiroPhoneDB"]?.ConnectionString;
+            return new SqlConnection(connectionString);
         }
 
-        // Ejecuta una consulta SELECT y devuelve un DataTable
-        public static DataTable ExecuteQuery(string query, SqlParameter[] parameters = null)
+        // Métodos auxiliares heredados dentro de la clase Conexion para no romper el resto del sistema
+        public static DataTable ExecuteQuery(string query, SqlParameter[] parameters = null, CommandType commandType = CommandType.Text)
         {
-            using (SqlConnection conn = GetConnection())
+            using (SqlConnection conn = Conectar())
             {
                 using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
+                    cmd.CommandType = commandType;
                     if (parameters != null)
                     {
                         cmd.Parameters.AddRange(parameters);
@@ -43,33 +35,35 @@ namespace HiroPhone
             }
         }
 
-        // Ejecuta sentencias INSERT, UPDATE, DELETE y devuelve el número de filas afectadas
-        public static int ExecuteNonQuery(string query, SqlParameter[] parameters = null)
+        public static int ExecuteNonQuery(string query, SqlParameter[] parameters = null, CommandType commandType = CommandType.Text)
         {
-            using (SqlConnection conn = GetConnection())
+            using (SqlConnection conn = Conectar())
             {
                 using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
+                    cmd.CommandType = commandType;
                     if (parameters != null)
                     {
                         cmd.Parameters.AddRange(parameters);
                     }
+                    conn.Open();
                     return cmd.ExecuteNonQuery();
                 }
             }
         }
 
-        // Ejecuta una consulta que devuelve un único valor escalar (ej. COUNT, MAX)
-        public static object ExecuteScalar(string query, SqlParameter[] parameters = null)
+        public static object ExecuteScalar(string query, SqlParameter[] parameters = null, CommandType commandType = CommandType.Text)
         {
-            using (SqlConnection conn = GetConnection())
+            using (SqlConnection conn = Conectar())
             {
                 using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
+                    cmd.CommandType = commandType;
                     if (parameters != null)
                     {
                         cmd.Parameters.AddRange(parameters);
                     }
+                    conn.Open();
                     return cmd.ExecuteScalar();
                 }
             }

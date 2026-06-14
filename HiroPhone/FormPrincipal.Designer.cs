@@ -31,6 +31,7 @@ namespace HiroPhone
             this.components = new System.ComponentModel.Container();
             this.panelSidebar = new System.Windows.Forms.Panel();
             this.btnCerrarSesion = new System.Windows.Forms.Button();
+            this.btnPostventa = new System.Windows.Forms.Button();
             this.btnSoporte = new System.Windows.Forms.Button();
             this.btnRRHH = new System.Windows.Forms.Button();
             this.btnVentas = new System.Windows.Forms.Button();
@@ -80,6 +81,7 @@ namespace HiroPhone
             // 
             this.panelSidebar.BackColor = System.Drawing.Color.FromArgb(24, 43, 73);
             this.panelSidebar.Controls.Add(this.btnCerrarSesion);
+            this.panelSidebar.Controls.Add(this.btnPostventa);
             this.panelSidebar.Controls.Add(this.btnSoporte);
             this.panelSidebar.Controls.Add(this.btnRRHH);
             this.panelSidebar.Controls.Add(this.btnVentas);
@@ -105,7 +107,7 @@ namespace HiroPhone
             this.btnCerrarSesion.Name = "btnCerrarSesion";
             this.btnCerrarSesion.Size = new System.Drawing.Size(220, 50);
             this.btnCerrarSesion.TabIndex = 6;
-            this.btnCerrarSesion.Text = "🚪 Cerrar Sesión";
+            this.btnCerrarSesion.Text = "Cerrar Sesión";
             this.btnCerrarSesion.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnCerrarSesion.Padding = new System.Windows.Forms.Padding(20, 0, 0, 0);
             this.btnCerrarSesion.UseVisualStyleBackColor = true;
@@ -124,11 +126,32 @@ namespace HiroPhone
             this.btnSoporte.Name = "btnSoporte";
             this.btnSoporte.Size = new System.Drawing.Size(220, 50);
             this.btnSoporte.TabIndex = 5;
-            this.btnSoporte.Text = "🔧 Servicio Técnico";
+            this.btnSoporte.Text = "Servicio Técnico";
             this.btnSoporte.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnSoporte.Padding = new System.Windows.Forms.Padding(20, 0, 0, 0);
             this.btnSoporte.UseVisualStyleBackColor = true;
             this.btnSoporte.Click += new System.EventHandler(this.btnSoporte_Click);
+            // 
+            // btnPostventa
+            // 
+            this.btnPostventa.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnPostventa.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btnPostventa.FlatAppearance.BorderSize = 0;
+            this.btnPostventa.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(33, 58, 99);
+            this.btnPostventa.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnPostventa.Font = new System.Drawing.Font("Segoe UI Semibold", 11F, System.Drawing.FontStyle.Bold);
+            this.btnPostventa.ForeColor = System.Drawing.Color.FromArgb(220, 220, 240);
+            this.btnPostventa.Location = new System.Drawing.Point(0, 370);
+            this.btnPostventa.Name = "btnPostventa";
+            this.btnPostventa.Size = new System.Drawing.Size(220, 50);
+            this.btnPostventa.TabIndex = 6;
+            this.btnPostventa.Text = "Garantías y Reclamos";
+            this.btnPostventa.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnPostventa.Padding = new System.Windows.Forms.Padding(20, 0, 0, 0);
+            this.btnPostventa.UseVisualStyleBackColor = true;
+            this.btnPostventa.Click += new System.EventHandler(this.btnPostventa_Click);
+            // 
+
             // 
             // btnRRHH
             // 
@@ -143,7 +166,7 @@ namespace HiroPhone
             this.btnRRHH.Name = "btnRRHH";
             this.btnRRHH.Size = new System.Drawing.Size(220, 50);
             this.btnRRHH.TabIndex = 4;
-            this.btnRRHH.Text = "👥 Personal y Asistencia";
+            this.btnRRHH.Text = "Personal y Asistencia";
             this.btnRRHH.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnRRHH.Padding = new System.Windows.Forms.Padding(20, 0, 0, 0);
             this.btnRRHH.UseVisualStyleBackColor = true;
@@ -162,7 +185,7 @@ namespace HiroPhone
             this.btnVentas.Name = "btnVentas";
             this.btnVentas.Size = new System.Drawing.Size(220, 50);
             this.btnVentas.TabIndex = 3;
-            this.btnVentas.Text = "💳 Ventas y Caja";
+            this.btnVentas.Text = "Ventas y Caja";
             this.btnVentas.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnVentas.Padding = new System.Windows.Forms.Padding(20, 0, 0, 0);
             this.btnVentas.UseVisualStyleBackColor = true;
@@ -181,7 +204,7 @@ namespace HiroPhone
             this.btnInventario.Name = "btnInventario";
             this.btnInventario.Size = new System.Drawing.Size(220, 50);
             this.btnInventario.TabIndex = 2;
-            this.btnInventario.Text = "📦 Inventario";
+            this.btnInventario.Text = "Inventario";
             this.btnInventario.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnInventario.Padding = new System.Windows.Forms.Padding(20, 0, 0, 0);
             this.btnInventario.UseVisualStyleBackColor = true;
@@ -200,7 +223,7 @@ namespace HiroPhone
             this.btnDashboard.Name = "btnDashboard";
             this.btnDashboard.Size = new System.Drawing.Size(220, 50);
             this.btnDashboard.TabIndex = 1;
-            this.btnDashboard.Text = "📊 Inicio / Dashboard";
+            this.btnDashboard.Text = "  Inicio";
             this.btnDashboard.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnDashboard.Padding = new System.Windows.Forms.Padding(20, 0, 0, 0);
             this.btnDashboard.UseVisualStyleBackColor = false;
@@ -255,27 +278,29 @@ namespace HiroPhone
             // 
             // lblFechaHora
             // 
-            this.lblFechaHora.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblFechaHora.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.lblFechaHora.Font = new System.Drawing.Font("Segoe UI Semibold", 9.75F, System.Drawing.FontStyle.Bold);
             this.lblFechaHora.ForeColor = System.Drawing.Color.FromArgb(108, 117, 125);
-            this.lblFechaHora.Location = new System.Drawing.Point(520, 39);
+            this.lblFechaHora.Location = new System.Drawing.Point(250, 39);
             this.lblFechaHora.Name = "lblFechaHora";
-            this.lblFechaHora.Size = new System.Drawing.Size(220, 23);
+            this.lblFechaHora.Size = new System.Drawing.Size(380, 23);
             this.lblFechaHora.TabIndex = 3;
             this.lblFechaHora.Text = "Fecha - Hora";
-            this.lblFechaHora.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.lblFechaHora.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // lblUserGreeting
             // 
-            this.lblUserGreeting.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblUserGreeting.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.lblUserGreeting.Font = new System.Drawing.Font("Segoe UI Semibold", 10.75F, System.Drawing.FontStyle.Bold);
             this.lblUserGreeting.ForeColor = System.Drawing.Color.FromArgb(73, 80, 87);
-            this.lblUserGreeting.Location = new System.Drawing.Point(520, 15);
+            this.lblUserGreeting.Location = new System.Drawing.Point(250, 15);
             this.lblUserGreeting.Name = "lblUserGreeting";
-            this.lblUserGreeting.Size = new System.Drawing.Size(220, 23);
+            this.lblUserGreeting.Size = new System.Drawing.Size(380, 23);
             this.lblUserGreeting.TabIndex = 2;
             this.lblUserGreeting.Text = "Bienvenido, Administrador";
-            this.lblUserGreeting.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.lblUserGreeting.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // lblModuloActivo
             // 
@@ -286,7 +311,7 @@ namespace HiroPhone
             this.lblModuloActivo.Name = "lblModuloActivo";
             this.lblModuloActivo.Size = new System.Drawing.Size(217, 30);
             this.lblModuloActivo.TabIndex = 1;
-            this.lblModuloActivo.Text = "Inicio / Dashboard";
+            this.lblModuloActivo.Text = "Inicio";
             // 
             // panelWindowControls
             // 
@@ -381,9 +406,9 @@ namespace HiroPhone
             this.lblHomeTitle.ForeColor = System.Drawing.Color.FromArgb(33, 37, 41);
             this.lblHomeTitle.Location = new System.Drawing.Point(10, 10);
             this.lblHomeTitle.Name = "lblHomeTitle";
-            this.lblHomeTitle.Size = new System.Drawing.Size(465, 37);
+            this.lblHomeTitle.Size = new System.Drawing.Size(350, 37);
             this.lblHomeTitle.TabIndex = 5;
-            this.lblHomeTitle.Text = "Panel de Control y Monitorización";
+            this.lblHomeTitle.Text = "HiroPhone - Bienvenidos";
             // 
             // lblHomeDesc
             // 
@@ -391,11 +416,9 @@ namespace HiroPhone
             this.lblHomeDesc.ForeColor = System.Drawing.Color.FromArgb(73, 80, 87);
             this.lblHomeDesc.Location = new System.Drawing.Point(12, 55);
             this.lblHomeDesc.Name = "lblHomeDesc";
-            this.lblHomeDesc.Size = new System.Drawing.Size(800, 48);
+            this.lblHomeDesc.Size = new System.Drawing.Size(800, 55);
             this.lblHomeDesc.TabIndex = 4;
-            this.lblHomeDesc.Text = "Bienvenido a HiroPhone. En este panel interactivo podrá revisar el estado general " +
-    "del inventario, las ventas generadas hoy, el personal activo de turno y las orde" +
-    "nes de servicio técnico en proceso.";
+            this.lblHomeDesc.Text = "Somos HiroPhone, una empresa líder en telecomunicaciones con años de experiencia en la venta de celulares de última generación, accesorios premium y servicio de reparación técnica especializada.";
             // 
             // panelKPI4
             // 
@@ -404,29 +427,29 @@ namespace HiroPhone
             this.panelKPI4.Controls.Add(this.lblKPITitle4);
             this.panelKPI4.Location = new System.Drawing.Point(620, 130);
             this.panelKPI4.Name = "panelKPI4";
-            this.panelKPI4.Size = new System.Drawing.Size(185, 120);
+            this.panelKPI4.Size = new System.Drawing.Size(185, 230);
             this.panelKPI4.TabIndex = 3;
             // 
             // lblKPIVal4
             // 
-            this.lblKPIVal4.Font = new System.Drawing.Font("Segoe UI Black", 24F, System.Drawing.FontStyle.Bold);
-            this.lblKPIVal4.ForeColor = System.Drawing.Color.FromArgb(220, 53, 69);
-            this.lblKPIVal4.Location = new System.Drawing.Point(10, 45);
+            this.lblKPIVal4.Font = new System.Drawing.Font("Segoe UI", 9.25F, System.Drawing.FontStyle.Regular);
+            this.lblKPIVal4.ForeColor = System.Drawing.Color.FromArgb(108, 117, 125);
+            this.lblKPIVal4.Location = new System.Drawing.Point(8, 50);
             this.lblKPIVal4.Name = "lblKPIVal4";
-            this.lblKPIVal4.Size = new System.Drawing.Size(165, 45);
+            this.lblKPIVal4.Size = new System.Drawing.Size(169, 170);
             this.lblKPIVal4.TabIndex = 1;
-            this.lblKPIVal4.Text = "5";
-            this.lblKPIVal4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lblKPIVal4.Text = "Nos caracterizamos por actuar con total transparencia, honestidad, compromiso y pasión en cada interacción.";
+            this.lblKPIVal4.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
             // lblKPITitle4
             // 
-            this.lblKPITitle4.Font = new System.Drawing.Font("Segoe UI Semibold", 9.75F, System.Drawing.FontStyle.Bold);
-            this.lblKPITitle4.ForeColor = System.Drawing.Color.FromArgb(108, 117, 125);
-            this.lblKPITitle4.Location = new System.Drawing.Point(10, 15);
+            this.lblKPITitle4.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
+            this.lblKPITitle4.ForeColor = System.Drawing.Color.FromArgb(24, 43, 73);
+            this.lblKPITitle4.Location = new System.Drawing.Point(5, 15);
             this.lblKPITitle4.Name = "lblKPITitle4";
-            this.lblKPITitle4.Size = new System.Drawing.Size(165, 20);
+            this.lblKPITitle4.Size = new System.Drawing.Size(175, 25);
             this.lblKPITitle4.TabIndex = 0;
-            this.lblKPITitle4.Text = "Servicio Técnico Pendiente";
+            this.lblKPITitle4.Text = "Valores";
             this.lblKPITitle4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // panelKPI3
@@ -436,29 +459,29 @@ namespace HiroPhone
             this.panelKPI3.Controls.Add(this.lblKPITitle3);
             this.panelKPI3.Location = new System.Drawing.Point(420, 130);
             this.panelKPI3.Name = "panelKPI3";
-            this.panelKPI3.Size = new System.Drawing.Size(185, 120);
+            this.panelKPI3.Size = new System.Drawing.Size(185, 230);
             this.panelKPI3.TabIndex = 2;
             // 
             // lblKPIVal3
             // 
-            this.lblKPIVal3.Font = new System.Drawing.Font("Segoe UI Black", 24F, System.Drawing.FontStyle.Bold);
-            this.lblKPIVal3.ForeColor = System.Drawing.Color.FromArgb(0, 123, 255);
-            this.lblKPIVal3.Location = new System.Drawing.Point(10, 45);
+            this.lblKPIVal3.Font = new System.Drawing.Font("Segoe UI", 9.25F, System.Drawing.FontStyle.Regular);
+            this.lblKPIVal3.ForeColor = System.Drawing.Color.FromArgb(108, 117, 125);
+            this.lblKPIVal3.Location = new System.Drawing.Point(8, 50);
             this.lblKPIVal3.Name = "lblKPIVal3";
-            this.lblKPIVal3.Size = new System.Drawing.Size(165, 45);
+            this.lblKPIVal3.Size = new System.Drawing.Size(169, 170);
             this.lblKPIVal3.TabIndex = 1;
-            this.lblKPIVal3.Text = "12";
-            this.lblKPIVal3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lblKPIVal3.Text = "Ser el centro de servicio técnico y venta de móviles de mayor confianza y excelencia en atención a nivel nacional.";
+            this.lblKPIVal3.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
             // lblKPITitle3
             // 
-            this.lblKPITitle3.Font = new System.Drawing.Font("Segoe UI Semibold", 9.75F, System.Drawing.FontStyle.Bold);
-            this.lblKPITitle3.ForeColor = System.Drawing.Color.FromArgb(108, 117, 125);
-            this.lblKPITitle3.Location = new System.Drawing.Point(10, 15);
+            this.lblKPITitle3.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
+            this.lblKPITitle3.ForeColor = System.Drawing.Color.FromArgb(24, 43, 73);
+            this.lblKPITitle3.Location = new System.Drawing.Point(5, 15);
             this.lblKPITitle3.Name = "lblKPITitle3";
-            this.lblKPITitle3.Size = new System.Drawing.Size(165, 20);
+            this.lblKPITitle3.Size = new System.Drawing.Size(175, 25);
             this.lblKPITitle3.TabIndex = 0;
-            this.lblKPITitle3.Text = "Empleados Activos";
+            this.lblKPITitle3.Text = "Nuestra Visión";
             this.lblKPITitle3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // panelKPI2
@@ -468,29 +491,29 @@ namespace HiroPhone
             this.panelKPI2.Controls.Add(this.lblKPITitle2);
             this.panelKPI2.Location = new System.Drawing.Point(220, 130);
             this.panelKPI2.Name = "panelKPI2";
-            this.panelKPI2.Size = new System.Drawing.Size(185, 120);
+            this.panelKPI2.Size = new System.Drawing.Size(185, 230);
             this.panelKPI2.TabIndex = 1;
             // 
             // lblKPIVal2
             // 
-            this.lblKPIVal2.Font = new System.Drawing.Font("Segoe UI Black", 24F, System.Drawing.FontStyle.Bold);
-            this.lblKPIVal2.ForeColor = System.Drawing.Color.FromArgb(23, 162, 184);
-            this.lblKPIVal2.Location = new System.Drawing.Point(10, 45);
+            this.lblKPIVal2.Font = new System.Drawing.Font("Segoe UI", 9.25F, System.Drawing.FontStyle.Regular);
+            this.lblKPIVal2.ForeColor = System.Drawing.Color.FromArgb(108, 117, 125);
+            this.lblKPIVal2.Location = new System.Drawing.Point(8, 50);
             this.lblKPIVal2.Name = "lblKPIVal2";
-            this.lblKPIVal2.Size = new System.Drawing.Size(165, 45);
+            this.lblKPIVal2.Size = new System.Drawing.Size(169, 170);
             this.lblKPIVal2.TabIndex = 1;
-            this.lblKPIVal2.Text = "133 u.";
-            this.lblKPIVal2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lblKPIVal2.Text = "Ofrecer soluciones de comunicación rápidas y seguras, brindando el mejor servicio de asesoría y reparaciones garantizadas.";
+            this.lblKPIVal2.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
             // lblKPITitle2
             // 
-            this.lblKPITitle2.Font = new System.Drawing.Font("Segoe UI Semibold", 9.75F, System.Drawing.FontStyle.Bold);
-            this.lblKPITitle2.ForeColor = System.Drawing.Color.FromArgb(108, 117, 125);
-            this.lblKPITitle2.Location = new System.Drawing.Point(10, 15);
+            this.lblKPITitle2.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
+            this.lblKPITitle2.ForeColor = System.Drawing.Color.FromArgb(24, 43, 73);
+            this.lblKPITitle2.Location = new System.Drawing.Point(5, 15);
             this.lblKPITitle2.Name = "lblKPITitle2";
-            this.lblKPITitle2.Size = new System.Drawing.Size(165, 20);
+            this.lblKPITitle2.Size = new System.Drawing.Size(175, 25);
             this.lblKPITitle2.TabIndex = 0;
-            this.lblKPITitle2.Text = "Total Teléfonos en Stock";
+            this.lblKPITitle2.Text = "Nuestra Misión";
             this.lblKPITitle2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // panelKPI1
@@ -500,29 +523,29 @@ namespace HiroPhone
             this.panelKPI1.Controls.Add(this.lblKPITitle1);
             this.panelKPI1.Location = new System.Drawing.Point(20, 130);
             this.panelKPI1.Name = "panelKPI1";
-            this.panelKPI1.Size = new System.Drawing.Size(185, 120);
+            this.panelKPI1.Size = new System.Drawing.Size(185, 230);
             this.panelKPI1.TabIndex = 0;
             // 
             // lblKPIVal1
             // 
-            this.lblKPIVal1.Font = new System.Drawing.Font("Segoe UI Black", 20F, System.Drawing.FontStyle.Bold);
-            this.lblKPIVal1.ForeColor = System.Drawing.Color.FromArgb(40, 167, 69);
-            this.lblKPIVal1.Location = new System.Drawing.Point(5, 45);
+            this.lblKPIVal1.Font = new System.Drawing.Font("Segoe UI", 9.25F, System.Drawing.FontStyle.Regular);
+            this.lblKPIVal1.ForeColor = System.Drawing.Color.FromArgb(108, 117, 125);
+            this.lblKPIVal1.Location = new System.Drawing.Point(8, 50);
             this.lblKPIVal1.Name = "lblKPIVal1";
-            this.lblKPIVal1.Size = new System.Drawing.Size(175, 45);
+            this.lblKPIVal1.Size = new System.Drawing.Size(169, 170);
             this.lblKPIVal1.TabIndex = 1;
-            this.lblKPIVal1.Text = "S/. 10,498.00";
-            this.lblKPIVal1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lblKPIVal1.Text = "Nos dedicamos a conectar personas ofreciendo lo último en tecnología móvil con una garantía real y soporte confiable.";
+            this.lblKPIVal1.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
             // lblKPITitle1
             // 
-            this.lblKPITitle1.Font = new System.Drawing.Font("Segoe UI Semibold", 9.75F, System.Drawing.FontStyle.Bold);
-            this.lblKPITitle1.ForeColor = System.Drawing.Color.FromArgb(108, 117, 125);
-            this.lblKPITitle1.Location = new System.Drawing.Point(10, 15);
+            this.lblKPITitle1.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
+            this.lblKPITitle1.ForeColor = System.Drawing.Color.FromArgb(24, 43, 73);
+            this.lblKPITitle1.Location = new System.Drawing.Point(5, 15);
             this.lblKPITitle1.Name = "lblKPITitle1";
-            this.lblKPITitle1.Size = new System.Drawing.Size(165, 20);
+            this.lblKPITitle1.Size = new System.Drawing.Size(175, 25);
             this.lblKPITitle1.TabIndex = 0;
-            this.lblKPITitle1.Text = "Ventas del Día";
+            this.lblKPITitle1.Text = "Quiénes Somos";
             this.lblKPITitle1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // timerClock
@@ -574,6 +597,7 @@ namespace HiroPhone
         private System.Windows.Forms.Button btnRRHH;
         private System.Windows.Forms.Button btnSoporte;
         private System.Windows.Forms.Button btnCerrarSesion;
+        private System.Windows.Forms.Button btnPostventa;
         private System.Windows.Forms.Panel panelHeader;
         private System.Windows.Forms.Panel panelWindowControls;
         private System.Windows.Forms.Button btnCerrar;

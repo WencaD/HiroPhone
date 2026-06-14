@@ -1,5 +1,6 @@
 using System;
 using System.Data;
+using System.Data.SqlClient;
 using System.Windows.Forms;
 
 namespace HiroPhone
@@ -32,22 +33,19 @@ namespace HiroPhone
         {
             try
             {
-                string query = @"
-                    SELECT TOP 100
-                        st.id_servicio AS [OT #],
-                        c.nombre_o_razon_social AS [Cliente],
-                        'Celular Cliente' AS [Equipo],
-                        st.descripcion_falla AS [Falla Reportada],
-                        150.00 AS [Costo],
-                        st.estado_servicio AS [Estado],
-                        CONVERT(VARCHAR(10), st.fecha_ingreso, 103) AS [Fecha Ingreso]
-                    FROM 
-                        Servicio_Tecnico st
-                        INNER JOIN Cliente c ON st.id_cliente = c.id_cliente
-                    ORDER BY 
-                        st.fecha_ingreso DESC";
-
-                dtReparaciones = DatabaseHelper.ExecuteQuery(query);
+                using (SqlConnection cn = Conexion.Conectar())
+                {
+                    cn.Open();
+                    using (SqlCommand cmd = new SqlCommand("sp_ListarServiciosTecnicos", cn))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        using (SqlDataAdapter da = new SqlDataAdapter(cmd))
+                        {
+                            dtReparaciones = new DataTable();
+                            da.Fill(dtReparaciones);
+                        }
+                    }
+                }
             }
             catch (Exception ex)
             {
@@ -85,40 +83,32 @@ namespace HiroPhone
 
         private int ObtenerOCrearCliente(string nombre)
         {
-            // Buscar id_cliente por nombre_o_razon_social
-            string search = "SELECT id_cliente FROM Cliente WHERE nombre_o_razon_social = @nombre";
-            var param = new System.Data.SqlClient.SqlParameter[] { new System.Data.SqlClient.SqlParameter("@nombre", nombre) };
-            object res = DatabaseHelper.ExecuteScalar(search, param);
-            if (res != null && res != DBNull.Value)
+            using (SqlConnection cn = Conexion.Conectar())
             {
-                return Convert.ToInt32(res);
+                cn.Open();
+                using (SqlCommand cmd = new SqlCommand("sp_ObtenerOCrearClienteSoporte", cn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@nombre", nombre);
+                    object res = cmd.ExecuteScalar();
+                    return Convert.ToInt32(res);
+                }
             }
-            
-            // Si no existe, crear uno nuevo con datos por defecto
-            string insert = @"
-                INSERT INTO Cliente (numero_documento, nombre_o_razon_social, correo, telefono, id_tipo_cliente)
-                VALUES (@doc, @nombre, @correo, @tel, 1);
-                SELECT SCOPE_IDENTITY();";
-            
-            // Generar un número de documento aleatorio
-            string rdoc = "10" + new Random().Next(10000000, 99999999).ToString();
-            var insertParams = new System.Data.SqlClient.SqlParameter[]
-            {
-                new System.Data.SqlClient.SqlParameter("@doc", rdoc),
-                new System.Data.SqlClient.SqlParameter("@nombre", nombre),
-                new System.Data.SqlClient.SqlParameter("@correo", nombre.Replace(" ", "").ToLower() + "@gmail.com"),
-                new System.Data.SqlClient.SqlParameter("@tel", "9" + new Random().Next(10000000, 99999999).ToString())
-            };
-            
-            return Convert.ToInt32(DatabaseHelper.ExecuteScalar(insert, insertParams));
         }
 
         private int ObtenerPrimerEmpleado()
         {
-            object res = DatabaseHelper.ExecuteScalar("SELECT TOP 1 id_empleado FROM Empleado");
-            if (res != null && res != DBNull.Value)
+            using (SqlConnection cn = Conexion.Conectar())
             {
-                return Convert.ToInt32(res);
+                cn.Open();
+                using (SqlCommand cmd = new SqlCommand("SELECT TOP 1 id_empleado FROM Empleado", cn))
+                {
+                    object res = cmd.ExecuteScalar();
+                    if (res != null && res != DBNull.Value)
+                    {
+                        return Convert.ToInt32(res);
+                    }
+                }
             }
             return 1; // Fallback
         }
@@ -156,26 +146,23 @@ namespace HiroPhone
                         // Actualizar cliente
                         int idCliente = ObtenerOCrearCliente(cliente);
 
-                        string updateQuery = @"
-                            UPDATE Servicio_Tecnico
-                            SET descripcion_falla = @falla, estado_servicio = @estado, id_cliente = @id_cliente
-                            WHERE id_servicio = @id_servicio";
-
-                        System.Data.SqlClient.SqlParameter[] parameters = new System.Data.SqlClient.SqlParameter[]
+                        using (SqlConnection cn = Conexion.Conectar())
                         {
-                            new System.Data.SqlClient.SqlParameter("@falla", falla),
-                            new System.Data.SqlClient.SqlParameter("@estado", estado),
-                            new System.Data.SqlClient.SqlParameter("@id_cliente", idCliente),
-                            new System.Data.SqlClient.SqlParameter("@id_servicio", idServicio)
-                        };
-
-                        DatabaseHelper.ExecuteNonQuery(updateQuery, parameters);
+                            cn.Open();
+                            using (SqlCommand cmd = new SqlCommand("sp_GuardarServicioTecnico", cn))
+                            {
+                                cmd.CommandType = CommandType.StoredProcedure;
+                                cmd.Parameters.AddWithValue("@id_servicio", idServicio);
+                                cmd.Parameters.AddWithValue("@descripcion_falla", falla);
+                                cmd.Parameters.AddWithValue("@estado_servicio", estado);
+                                cmd.Parameters.AddWithValue("@id_cliente", idCliente);
+                                cmd.Parameters.AddWithValue("@id_empleado", DBNull.Value);
+                                cmd.ExecuteNonQuery();
+                            }
+                        }
                         MessageBox.Show("Orden de trabajo actualizada con éxito.", "Soporte Técnico", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                        if (string.IsNullOrEmpty(txtBuscarSoporte.Text.Trim()))
-                            InicializarReparaciones();
-                        else
-                            FiltrarReparaciones(txtBuscarSoporte.Text.Trim());
+                        InicializarReparaciones();
 
                         return;
                     }
@@ -189,25 +176,24 @@ namespace HiroPhone
                 int newClienteId = ObtenerOCrearCliente(cliente);
                 int firstEmpleadoId = ObtenerPrimerEmpleado();
 
-                string insertQuery = @"
-                    INSERT INTO Servicio_Tecnico (fecha_ingreso, descripcion_falla, estado_servicio, id_cliente, id_empleado)
-                    VALUES (GETDATE(), @falla, @estado, @id_cliente, @id_empleado)";
-
-                System.Data.SqlClient.SqlParameter[] insertParams = new System.Data.SqlClient.SqlParameter[]
+                using (SqlConnection cn = Conexion.Conectar())
                 {
-                    new System.Data.SqlClient.SqlParameter("@falla", falla),
-                    new System.Data.SqlClient.SqlParameter("@estado", estado),
-                    new System.Data.SqlClient.SqlParameter("@id_cliente", newClienteId),
-                    new System.Data.SqlClient.SqlParameter("@id_empleado", firstEmpleadoId)
-                };
-
-                DatabaseHelper.ExecuteNonQuery(insertQuery, insertParams);
+                    cn.Open();
+                    using (SqlCommand cmd = new SqlCommand("sp_GuardarServicioTecnico", cn))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.AddWithValue("@id_servicio", 0);
+                        cmd.Parameters.AddWithValue("@descripcion_falla", falla);
+                        cmd.Parameters.AddWithValue("@estado_servicio", estado);
+                        cmd.Parameters.AddWithValue("@id_cliente", newClienteId);
+                        cmd.Parameters.AddWithValue("@id_empleado", firstEmpleadoId);
+                        cmd.ExecuteNonQuery();
+                    }
+                }
                 MessageBox.Show("Nueva orden de trabajo de soporte ingresada al taller con éxito.", "Soporte Técnico", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                if (string.IsNullOrEmpty(txtBuscarSoporte.Text.Trim()))
-                    InicializarReparaciones();
-                else
-                    FiltrarReparaciones(txtBuscarSoporte.Text.Trim());
+                InicializarReparaciones();
+                LimpiarFormulario();
             }
             catch (Exception ex)
             {
@@ -216,54 +202,72 @@ namespace HiroPhone
             }
         }
 
-        private void txtBuscarSoporte_TextChanged(object sender, EventArgs e)
+        private void LimpiarFormulario()
         {
-            string filtro = txtBuscarSoporte.Text.Trim();
-            if (string.IsNullOrEmpty(filtro))
+            dgvReparaciones.ClearSelection();
+            txtCliente.Clear();
+            txtEquipo.Text = "Samsung Galaxy S24 Ultra";
+            txtFalla.Text = "Pantalla rota por caída";
+            txtCosto.Text = "150.00";
+            cboEstado.SelectedIndex = 0;
+        }
+
+        private void btnNuevo_Click(object sender, EventArgs e)
+        {
+            LimpiarFormulario();
+        }
+
+        private void btnEliminar_Click(object sender, EventArgs e)
+        {
+            if (dgvReparaciones.SelectedRows.Count > 0)
             {
-                InicializarReparaciones();
+                DialogResult r = MessageBox.Show("¿Desea eliminar la orden de trabajo seleccionada?", "Eliminar OT", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                if (r == DialogResult.Yes)
+                {
+                    try
+                    {
+                        DataRowView row = (DataRowView)dgvReparaciones.SelectedRows[0].DataBoundItem;
+                        int idServicio = Convert.ToInt32(row["OT #"]);
+                        using (SqlConnection cn = Conexion.Conectar())
+                        {
+                            cn.Open();
+                            using (SqlCommand cmd = new SqlCommand("sp_EliminarServicioTecnico", cn))
+                            {
+                                cmd.CommandType = CommandType.StoredProcedure;
+                                cmd.Parameters.AddWithValue("@id_servicio", idServicio);
+                                cmd.ExecuteNonQuery();
+                            }
+                        }
+                        MessageBox.Show("Orden de trabajo eliminada con éxito.", "Soporte Técnico", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                        InicializarReparaciones();
+                        LimpiarFormulario();
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Error al eliminar la orden de soporte en SQL Server:\n" + ex.Message, 
+                                        "Error de Base de Datos", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
             }
             else
             {
-                FiltrarReparaciones(filtro);
+                MessageBox.Show("Seleccione una orden de trabajo para eliminar.", "Soporte Técnico", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
 
-        private void FiltrarReparaciones(string filtro)
+        private void txtBuscarSoporte_TextChanged(object sender, EventArgs e)
         {
-            try
+            if (dtReparaciones == null) return;
+            string filtro = txtBuscarSoporte.Text.Trim().Replace("'", "''");
+            if (string.IsNullOrEmpty(filtro))
             {
-                string query = @"
-                    SELECT 
-                        st.id_servicio AS [OT #],
-                        c.nombre_o_razon_social AS [Cliente],
-                        'Celular Cliente' AS [Equipo],
-                        st.descripcion_falla AS [Falla Reportada],
-                        150.00 AS [Costo],
-                        st.estado_servicio AS [Estado],
-                        CONVERT(VARCHAR(10), st.fecha_ingreso, 103) AS [Fecha Ingreso]
-                    FROM 
-                        Servicio_Tecnico st
-                        INNER JOIN Cliente c ON st.id_cliente = c.id_cliente
-                    WHERE 
-                        c.nombre_o_razon_social LIKE @Filtro OR 
-                        st.descripcion_falla LIKE @Filtro OR 
-                        st.estado_servicio LIKE @Filtro
-                    ORDER BY 
-                        st.fecha_ingreso DESC";
-
-                System.Data.SqlClient.SqlParameter[] parameters = new System.Data.SqlClient.SqlParameter[]
-                {
-                    new System.Data.SqlClient.SqlParameter("@Filtro", "%" + filtro + "%")
-                };
-
-                dtReparaciones = DatabaseHelper.ExecuteQuery(query, parameters);
-                dgvReparaciones.DataSource = dtReparaciones;
+                dtReparaciones.DefaultView.RowFilter = "";
             }
-            catch (Exception ex)
+            else
             {
-                MessageBox.Show("Error al filtrar ordenes de soporte desde SQL Server:\n" + ex.Message, 
-                                "Error de Base de Datos", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                dtReparaciones.DefaultView.RowFilter = string.Format(
+                    "Cliente LIKE '%{0}%' OR [Falla Reportada] LIKE '%{0}%' OR Estado LIKE '%{0}%'", filtro);
             }
         }
     }

@@ -1,4 +1,5 @@
 using System;
+using System.Data;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
@@ -55,16 +56,59 @@ namespace HiroPhone
 
             try
             {
-                string query = "SELECT COUNT(1) FROM Usuario WHERE username = @User AND password = @Pass AND estado_usuario = 1";
+                string query = @"
+                    SELECT TOP 1
+                        u.id_usuario,
+                        u.username,
+                        ISNULL(e.id_empleado, 0) AS id_empleado,
+                        ISNULL(e.nombres_empleado + ' ' + e.apellidos_Paterno, u.username) AS nombre_completo,
+                        ISNULL(c.nombre_cargo, 'Administrador del Sistema') AS rol
+                    FROM Usuario u
+                    LEFT JOIN Empleado e ON u.id_usuario = e.id_usuario
+                    LEFT JOIN Cargo c ON e.id_cargo = c.id_cargo
+                    WHERE u.username = @User AND u.password = @Pass AND u.estado_usuario = 1";
+
                 System.Data.SqlClient.SqlParameter[] parameters = new System.Data.SqlClient.SqlParameter[]
                 {
                     new System.Data.SqlClient.SqlParameter("@User", usuario),
                     new System.Data.SqlClient.SqlParameter("@Pass", password)
                 };
                 
-                int count = Convert.ToInt32(DatabaseHelper.ExecuteScalar(query, parameters));
-                if (count > 0)
+                DataTable dt = Conexion.ExecuteQuery(query, parameters);
+                if (dt.Rows.Count > 0)
                 {
+                    DataRow row = dt.Rows[0];
+                    UserSession.IdUsuario = Convert.ToInt32(row["id_usuario"]);
+                    UserSession.Username = row["username"].ToString();
+                    UserSession.IdEmpleado = Convert.ToInt32(row["id_empleado"]);
+                    UserSession.NombreCompletoEmpleado = row["nombre_completo"].ToString();
+                    UserSession.Rol = row["rol"].ToString();
+
+                    // ====================================================
+                    // CARGAR PERMISOS DEL USUARIO DESDE LA BD
+                    // ====================================================
+                    UserSession.Permisos.Clear(); // Limpiamos los permisos anteriores
+                    
+                    // Consulta SQL con INNER JOIN para traer los permisos del usuario
+                    string qPermisos = "SELECT p.nombre_permiso FROM Usuario_Permiso up " +
+                                       "INNER JOIN Permiso p ON up.id_permiso = p.id_permiso " +
+                                       "WHERE up.id_usuario = @IdUsuario";
+
+                    System.Data.SqlClient.SqlParameter[] pPermisos = new System.Data.SqlClient.SqlParameter[]
+                    {
+                        new System.Data.SqlClient.SqlParameter("@IdUsuario", UserSession.IdUsuario)
+                    };
+
+                    // Ejecutamos la consulta
+                    DataTable dtPermisos = Conexion.ExecuteQuery(qPermisos, pPermisos);
+                    
+                    // Llenamos la lista de permisos usando un bucle for tradicional
+                    for (int i = 0; i < dtPermisos.Rows.Count; i++)
+                    {
+                        string nombrePermiso = dtPermisos.Rows[i]["nombre_permiso"].ToString();
+                        UserSession.Permisos.Add(nombrePermiso);
+                    }
+
                     loginValido = true;
                 }
             }

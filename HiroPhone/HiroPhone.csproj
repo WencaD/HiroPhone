@@ -83,9 +83,19 @@
     <Compile Include="FormSoporte.Designer.cs">
       <DependentUpon>FormSoporte.cs</DependentUpon>
     </Compile>
-    <Compile Include="DatabaseHelper.cs" />
+    <Compile Include="FormPostventa.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormPostventa.Designer.cs">
+      <DependentUpon>FormPostventa.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Conexion.cs" />
+    <Compile Include="UserSession.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="FormInventario.resx">
+      <DependentUpon>FormInventario.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FormLogin.resx">
       <DependentUpon>FormLogin.cs</DependentUpon>
     </EmbeddedResource>

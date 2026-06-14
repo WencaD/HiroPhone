@@ -47,6 +47,8 @@ namespace HiroPhone
             this.lblHistorial = new System.Windows.Forms.Label();
             this.lblBuscarSoporte = new System.Windows.Forms.Label();
             this.txtBuscarSoporte = new System.Windows.Forms.TextBox();
+            this.btnEliminar = new System.Windows.Forms.Button();
+            this.btnNuevo = new System.Windows.Forms.Button();
             this.panelIngreso.SuspendLayout();
             this.panelGrid.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvReparaciones)).BeginInit();
@@ -67,6 +69,8 @@ namespace HiroPhone
             // 
             this.panelIngreso.BackColor = System.Drawing.Color.White;
             this.panelIngreso.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panelIngreso.Controls.Add(this.btnEliminar);
+            this.panelIngreso.Controls.Add(this.btnNuevo);
             this.panelIngreso.Controls.Add(this.cboEstado);
             this.panelIngreso.Controls.Add(this.lblEstado);
             this.panelIngreso.Controls.Add(this.btnGuardar);
@@ -113,13 +117,45 @@ namespace HiroPhone
             this.btnGuardar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnGuardar.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold);
             this.btnGuardar.ForeColor = System.Drawing.Color.White;
-            this.btnGuardar.Location = new System.Drawing.Point(20, 410);
+            this.btnGuardar.Location = new System.Drawing.Point(20, 380);
             this.btnGuardar.Name = "btnGuardar";
-            this.btnGuardar.Size = new System.Drawing.Size(278, 40);
+            this.btnGuardar.Size = new System.Drawing.Size(278, 35);
             this.btnGuardar.TabIndex = 9;
             this.btnGuardar.Text = "💾 Guardar Ficha / Diagnóstico";
             this.btnGuardar.UseVisualStyleBackColor = false;
             this.btnGuardar.Click += new System.EventHandler(this.btnGuardar_Click);
+            // 
+            // btnEliminar
+            // 
+            this.btnEliminar.BackColor = System.Drawing.Color.FromArgb(220, 53, 69);
+            this.btnEliminar.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnEliminar.FlatAppearance.BorderSize = 0;
+            this.btnEliminar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnEliminar.Font = new System.Drawing.Font("Segoe UI Semibold", 9.75F, System.Drawing.FontStyle.Bold);
+            this.btnEliminar.ForeColor = System.Drawing.Color.White;
+            this.btnEliminar.Location = new System.Drawing.Point(20, 425);
+            this.btnEliminar.Name = "btnEliminar";
+            this.btnEliminar.Size = new System.Drawing.Size(130, 35);
+            this.btnEliminar.TabIndex = 12;
+            this.btnEliminar.Text = "Eliminar";
+            this.btnEliminar.UseVisualStyleBackColor = false;
+            this.btnEliminar.Click += new System.EventHandler(this.btnEliminar_Click);
+            // 
+            // btnNuevo
+            // 
+            this.btnNuevo.BackColor = System.Drawing.Color.FromArgb(40, 167, 69);
+            this.btnNuevo.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnNuevo.FlatAppearance.BorderSize = 0;
+            this.btnNuevo.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnNuevo.Font = new System.Drawing.Font("Segoe UI Semibold", 9.75F, System.Drawing.FontStyle.Bold);
+            this.btnNuevo.ForeColor = System.Drawing.Color.White;
+            this.btnNuevo.Location = new System.Drawing.Point(168, 425);
+            this.btnNuevo.Name = "btnNuevo";
+            this.btnNuevo.Size = new System.Drawing.Size(130, 35);
+            this.btnNuevo.TabIndex = 13;
+            this.btnNuevo.Text = "Nuevo";
+            this.btnNuevo.UseVisualStyleBackColor = false;
+            this.btnNuevo.Click += new System.EventHandler(this.btnNuevo_Click);
             // 
             // txtCosto
             // 
@@ -211,8 +247,6 @@ namespace HiroPhone
             this.lblFichaIngreso.Size = new System.Drawing.Size(131, 21);
             this.lblFichaIngreso.TabIndex = 0;
             this.lblFichaIngreso.Text = "Ficha de Ingreso";
-            // 
-            // panelGrid
             // 
             this.panelGrid.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
@@ -319,6 +353,8 @@ namespace HiroPhone
         private System.Windows.Forms.Label lblEstado;
         private System.Windows.Forms.Button btnGuardar;
         private System.Windows.Forms.DataGridView dgvReparaciones;
+        private System.Windows.Forms.Button btnEliminar;
+        private System.Windows.Forms.Button btnNuevo;
         private System.Windows.Forms.Label lblBuscarSoporte;
         private System.Windows.Forms.TextBox txtBuscarSoporte;
     }

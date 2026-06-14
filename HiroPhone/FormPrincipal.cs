@@ -29,8 +29,22 @@ namespace HiroPhone
             // Establecer el botón de Inicio como activo por defecto
             ActivarBoton(btnDashboard);
 
-            // Cargar indicadores KPI desde la base de datos
-            CargarKPIs();
+            // Mostrar saludo personalizado y aplicar rol
+            if (UserSession.IsLoggedIn)
+            {
+                lblUserGreeting.Text = $"Bienvenido, {UserSession.NombreCompletoEmpleado}";
+                
+                // Restricciones de seguridad basadas en permisos dinámicos de la base de datos
+                btnVentas.Visible = UserSession.HasPermission("Acceso_Ventas");
+                btnInventario.Visible = UserSession.HasPermission("Acceso_Inventario");
+                btnRRHH.Visible = UserSession.HasPermission("Acceso_RRHH");
+                btnSoporte.Visible = UserSession.HasPermission("Acceso_Soporte");
+                btnPostventa.Visible = UserSession.HasPermission("Acceso_Postventa");
+            }
+            else
+            {
+                lblUserGreeting.Text = "Bienvenido, Invitado";
+            }
         }
 
         // Temporizador para actualizar la hora en tiempo real
@@ -131,6 +145,12 @@ namespace HiroPhone
             AbrirFormHijo(new FormSoporte());
         }
 
+        private void btnPostventa_Click(object sender, EventArgs e)
+        {
+            ActivarBoton((Button)sender);
+            AbrirFormHijo(new FormPostventa());
+        }
+
         private void btnCerrarSesion_Click(object sender, EventArgs e)
         {
             DialogResult resultado = MessageBox.Show("¿Está seguro de que desea cerrar sesión?", "Cerrar Sesión", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
@@ -177,23 +197,23 @@ namespace HiroPhone
             {
                 // 1. Ventas del Día
                 string qVentas = "SELECT ISNULL(SUM(total_venta), 0) FROM Venta WHERE CAST(fecha_venta AS DATE) = CAST(GETDATE() AS DATE)";
-                double ventasHoy = Convert.ToDouble(DatabaseHelper.ExecuteScalar(qVentas));
+                double ventasHoy = Convert.ToDouble(Conexion.ExecuteScalar(qVentas));
                 lblKPIVal1.Text = $"S/. {ventasHoy:N2}";
                 lblKPIVal1.Font = new Font("Segoe UI Black", 14F, FontStyle.Bold); // Reducir tamaño de letra para evitar el desborde
 
                 // 2. Total Teléfonos en Stock
                 string qStock = "SELECT ISNULL(SUM(i.stock_actual), 0) FROM Inventario i INNER JOIN Producto p ON i.id_producto = p.id_producto INNER JOIN Categoria_Producto c ON p.id_categoria = c.id_categoria WHERE c.nombre_categoria = 'Smartphones'";
-                int stock = Convert.ToInt32(DatabaseHelper.ExecuteScalar(qStock));
+                int stock = Convert.ToInt32(Conexion.ExecuteScalar(qStock));
                 lblKPIVal2.Text = $"{stock} u.";
 
                 // 3. Empleados Activos
                 string qEmpleados = "SELECT COUNT(1) FROM Empleado";
-                int empleados = Convert.ToInt32(DatabaseHelper.ExecuteScalar(qEmpleados));
+                int empleados = Convert.ToInt32(Conexion.ExecuteScalar(qEmpleados));
                 lblKPIVal3.Text = empleados.ToString();
 
                 // 4. Servicio Técnico en cola/diagnóstico
                 string qSoporte = "SELECT COUNT(1) FROM Servicio_Tecnico WHERE estado_servicio IN ('En Cola', 'Diagnostico')";
-                int soporte = Convert.ToInt32(DatabaseHelper.ExecuteScalar(qSoporte));
+                int soporte = Convert.ToInt32(Conexion.ExecuteScalar(qSoporte));
                 lblKPIVal4.Text = soporte.ToString();
             }
             catch (Exception)

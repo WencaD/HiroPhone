@@ -28,6 +28,7 @@ namespace HiroPhone
         /// </summary>
         private void InitializeComponent()
         {
+            this.btnActualizarPrecio = new System.Windows.Forms.Button();
             this.lblTitulo = new System.Windows.Forms.Label();
             this.panelSearch = new System.Windows.Forms.Panel();
             this.btnBuscar = new System.Windows.Forms.Button();
@@ -38,19 +39,36 @@ namespace HiroPhone
             this.btnTraslado = new System.Windows.Forms.Button();
             this.btnAjustarStock = new System.Windows.Forms.Button();
             this.btnNuevoProducto = new System.Windows.Forms.Button();
+            this.btnMantenimientos = new System.Windows.Forms.Button();
             this.panelSearch.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvProductos)).BeginInit();
             this.panelActions.SuspendLayout();
             this.SuspendLayout();
             // 
+            // btnActualizarPrecio
+            // 
+            this.btnActualizarPrecio.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(193)))), ((int)(((byte)(7)))));
+            this.btnActualizarPrecio.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnActualizarPrecio.FlatAppearance.BorderSize = 0;
+            this.btnActualizarPrecio.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnActualizarPrecio.Font = new System.Drawing.Font("Segoe UI Semibold", 9.75F, System.Drawing.FontStyle.Bold);
+            this.btnActualizarPrecio.ForeColor = System.Drawing.Color.Black;
+            this.btnActualizarPrecio.Location = new System.Drawing.Point(490, 10);
+            this.btnActualizarPrecio.Name = "btnActualizarPrecio";
+            this.btnActualizarPrecio.Size = new System.Drawing.Size(150, 30);
+            this.btnActualizarPrecio.TabIndex = 3;
+            this.btnActualizarPrecio.Text = "💸 Cambiar Precio";
+            this.btnActualizarPrecio.UseVisualStyleBackColor = false;
+            this.btnActualizarPrecio.Click += new System.EventHandler(this.btnActualizarPrecio_Click);
+            // 
             // lblTitulo
             // 
             this.lblTitulo.AutoSize = true;
             this.lblTitulo.Font = new System.Drawing.Font("Segoe UI Black", 16F, System.Drawing.FontStyle.Bold);
-            this.lblTitulo.ForeColor = System.Drawing.Color.FromArgb(33, 37, 41);
-            this.lblTitulo.Location = new System.Drawing.Point(15, 15);
+            this.lblTitulo.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(37)))), ((int)(((byte)(41)))));
+            this.lblTitulo.Location = new System.Drawing.Point(15, 9);
             this.lblTitulo.Name = "lblTitulo";
-            this.lblTitulo.Size = new System.Drawing.Size(387, 30);
+            this.lblTitulo.Size = new System.Drawing.Size(391, 30);
             this.lblTitulo.TabIndex = 0;
             this.lblTitulo.Text = "Control de Inventario y Existencias";
             // 
@@ -71,7 +89,7 @@ namespace HiroPhone
             // btnBuscar
             // 
             this.btnBuscar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnBuscar.BackColor = System.Drawing.Color.FromArgb(41, 128, 185);
+            this.btnBuscar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(41)))), ((int)(((byte)(128)))), ((int)(((byte)(185)))));
             this.btnBuscar.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnBuscar.FlatAppearance.BorderSize = 0;
             this.btnBuscar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -94,15 +112,16 @@ namespace HiroPhone
             this.txtBuscar.Name = "txtBuscar";
             this.txtBuscar.Size = new System.Drawing.Size(520, 25);
             this.txtBuscar.TabIndex = 1;
+            this.txtBuscar.TextChanged += new System.EventHandler(this.txtBuscar_TextChanged);
             // 
             // lblBuscar
             // 
             this.lblBuscar.AutoSize = true;
             this.lblBuscar.Font = new System.Drawing.Font("Segoe UI Semibold", 9.75F, System.Drawing.FontStyle.Bold);
-            this.lblBuscar.ForeColor = System.Drawing.Color.FromArgb(73, 80, 87);
+            this.lblBuscar.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(73)))), ((int)(((byte)(80)))), ((int)(((byte)(87)))));
             this.lblBuscar.Location = new System.Drawing.Point(15, 20);
             this.lblBuscar.Name = "lblBuscar";
-            this.lblBuscar.Size = new System.Drawing.Size(117, 17);
+            this.lblBuscar.Size = new System.Drawing.Size(106, 17);
             this.lblBuscar.TabIndex = 0;
             this.lblBuscar.Text = "Filtrar Producto:";
             // 
@@ -129,9 +148,11 @@ namespace HiroPhone
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panelActions.BackColor = System.Drawing.Color.White;
             this.panelActions.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panelActions.Controls.Add(this.btnActualizarPrecio);
             this.panelActions.Controls.Add(this.btnTraslado);
             this.panelActions.Controls.Add(this.btnAjustarStock);
             this.panelActions.Controls.Add(this.btnNuevoProducto);
+            this.panelActions.Controls.Add(this.btnMantenimientos);
             this.panelActions.Location = new System.Drawing.Point(20, 505);
             this.panelActions.Name = "panelActions";
             this.panelActions.Size = new System.Drawing.Size(800, 50);
@@ -139,7 +160,7 @@ namespace HiroPhone
             // 
             // btnTraslado
             // 
-            this.btnTraslado.BackColor = System.Drawing.Color.FromArgb(108, 117, 125);
+            this.btnTraslado.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(108)))), ((int)(((byte)(117)))), ((int)(((byte)(125)))));
             this.btnTraslado.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnTraslado.FlatAppearance.BorderSize = 0;
             this.btnTraslado.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -155,7 +176,7 @@ namespace HiroPhone
             // 
             // btnAjustarStock
             // 
-            this.btnAjustarStock.BackColor = System.Drawing.Color.FromArgb(23, 162, 184);
+            this.btnAjustarStock.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(23)))), ((int)(((byte)(162)))), ((int)(((byte)(184)))));
             this.btnAjustarStock.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnAjustarStock.FlatAppearance.BorderSize = 0;
             this.btnAjustarStock.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -171,7 +192,7 @@ namespace HiroPhone
             // 
             // btnNuevoProducto
             // 
-            this.btnNuevoProducto.BackColor = System.Drawing.Color.FromArgb(40, 167, 69);
+            this.btnNuevoProducto.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(167)))), ((int)(((byte)(69)))));
             this.btnNuevoProducto.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnNuevoProducto.FlatAppearance.BorderSize = 0;
             this.btnNuevoProducto.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -185,11 +206,27 @@ namespace HiroPhone
             this.btnNuevoProducto.UseVisualStyleBackColor = false;
             this.btnNuevoProducto.Click += new System.EventHandler(this.btnNuevoProducto_Click);
             // 
+            // btnMantenimientos
+            // 
+            this.btnMantenimientos.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(110)))), ((int)(((byte)(80)))), ((int)(((byte)(180)))));
+            this.btnMantenimientos.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnMantenimientos.FlatAppearance.BorderSize = 0;
+            this.btnMantenimientos.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnMantenimientos.Font = new System.Drawing.Font("Segoe UI Semibold", 9.75F, System.Drawing.FontStyle.Bold);
+            this.btnMantenimientos.ForeColor = System.Drawing.Color.White;
+            this.btnMantenimientos.Location = new System.Drawing.Point(650, 10);
+            this.btnMantenimientos.Name = "btnMantenimientos";
+            this.btnMantenimientos.Size = new System.Drawing.Size(135, 30);
+            this.btnMantenimientos.TabIndex = 4;
+            this.btnMantenimientos.Text = "Mantenimientos";
+            this.btnMantenimientos.UseVisualStyleBackColor = false;
+            this.btnMantenimientos.Click += new System.EventHandler(this.btnMantenimientos_Click);
+            // 
             // FormInventario
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.FromArgb(244, 246, 249);
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(246)))), ((int)(((byte)(249)))));
             this.ClientSize = new System.Drawing.Size(840, 570);
             this.Controls.Add(this.panelActions);
             this.Controls.Add(this.dgvProductos);
@@ -220,5 +257,7 @@ namespace HiroPhone
         private System.Windows.Forms.Button btnTraslado;
         private System.Windows.Forms.Button btnAjustarStock;
         private System.Windows.Forms.Button btnNuevoProducto;
+        private System.Windows.Forms.Button btnActualizarPrecio;
+        private System.Windows.Forms.Button btnMantenimientos;
     }
 }

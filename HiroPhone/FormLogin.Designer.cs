@@ -50,7 +50,7 @@ namespace HiroPhone
             // 
             // panelTopBar
             // 
-            this.panelTopBar.BackColor = System.Drawing.Color.FromArgb(24, 43, 73);
+            this.panelTopBar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(24)))), ((int)(((byte)(43)))), ((int)(((byte)(73)))));
             this.panelTopBar.Controls.Add(this.btnMinimizar);
             this.panelTopBar.Controls.Add(this.btnCerrar);
             this.panelTopBar.Dock = System.Windows.Forms.DockStyle.Top;
@@ -65,10 +65,10 @@ namespace HiroPhone
             this.btnMinimizar.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnMinimizar.Dock = System.Windows.Forms.DockStyle.Right;
             this.btnMinimizar.FlatAppearance.BorderSize = 0;
-            this.btnMinimizar.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(41, 128, 185);
+            this.btnMinimizar.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(41)))), ((int)(((byte)(128)))), ((int)(((byte)(185)))));
             this.btnMinimizar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnMinimizar.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
-            this.btnMinimizar.ForeColor = System.Drawing.Color.FromArgb(220, 220, 240);
+            this.btnMinimizar.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(240)))));
             this.btnMinimizar.Location = new System.Drawing.Point(340, 0);
             this.btnMinimizar.Name = "btnMinimizar";
             this.btnMinimizar.Size = new System.Drawing.Size(40, 35);
@@ -82,10 +82,10 @@ namespace HiroPhone
             this.btnCerrar.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnCerrar.Dock = System.Windows.Forms.DockStyle.Right;
             this.btnCerrar.FlatAppearance.BorderSize = 0;
-            this.btnCerrar.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(220, 53, 69);
+            this.btnCerrar.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(53)))), ((int)(((byte)(69)))));
             this.btnCerrar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnCerrar.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
-            this.btnCerrar.ForeColor = System.Drawing.Color.FromArgb(220, 220, 240);
+            this.btnCerrar.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(240)))));
             this.btnCerrar.Location = new System.Drawing.Point(380, 0);
             this.btnCerrar.Name = "btnCerrar";
             this.btnCerrar.Size = new System.Drawing.Size(40, 35);
@@ -113,7 +113,7 @@ namespace HiroPhone
             // lblError
             // 
             this.lblError.Font = new System.Drawing.Font("Segoe UI Semibold", 9F);
-            this.lblError.ForeColor = System.Drawing.Color.FromArgb(220, 53, 69);
+            this.lblError.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(53)))), ((int)(((byte)(69)))));
             this.lblError.Location = new System.Drawing.Point(30, 298);
             this.lblError.Name = "lblError";
             this.lblError.Size = new System.Drawing.Size(300, 20);
@@ -124,7 +124,7 @@ namespace HiroPhone
             // 
             // btnIngresar
             // 
-            this.btnIngresar.BackColor = System.Drawing.Color.FromArgb(13, 110, 253);
+            this.btnIngresar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(13)))), ((int)(((byte)(110)))), ((int)(((byte)(253)))));
             this.btnIngresar.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnIngresar.FlatAppearance.BorderSize = 0;
             this.btnIngresar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -140,7 +140,7 @@ namespace HiroPhone
             // 
             // panelPassBorder
             // 
-            this.panelPassBorder.BackColor = System.Drawing.Color.FromArgb(240, 242, 245);
+            this.panelPassBorder.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(242)))), ((int)(((byte)(245)))));
             this.panelPassBorder.Controls.Add(this.txtPassword);
             this.panelPassBorder.Location = new System.Drawing.Point(30, 245);
             this.panelPassBorder.Name = "panelPassBorder";
@@ -150,11 +150,11 @@ namespace HiroPhone
             // 
             // txtPassword
             // 
-            this.txtPassword.BackColor = System.Drawing.Color.FromArgb(240, 242, 245);
+            this.txtPassword.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(242)))), ((int)(((byte)(245)))));
             this.txtPassword.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txtPassword.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtPassword.Font = new System.Drawing.Font("Segoe UI", 11F);
-            this.txtPassword.ForeColor = System.Drawing.Color.FromArgb(33, 37, 41);
+            this.txtPassword.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(37)))), ((int)(((byte)(41)))));
             this.txtPassword.Location = new System.Drawing.Point(10, 8);
             this.txtPassword.Name = "txtPassword";
             this.txtPassword.PasswordChar = '●';
@@ -166,7 +166,7 @@ namespace HiroPhone
             // 
             this.lblPassword.AutoSize = true;
             this.lblPassword.Font = new System.Drawing.Font("Segoe UI Semibold", 9.75F, System.Drawing.FontStyle.Bold);
-            this.lblPassword.ForeColor = System.Drawing.Color.FromArgb(108, 117, 125);
+            this.lblPassword.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(108)))), ((int)(((byte)(117)))), ((int)(((byte)(125)))));
             this.lblPassword.Location = new System.Drawing.Point(30, 222);
             this.lblPassword.Name = "lblPassword";
             this.lblPassword.Size = new System.Drawing.Size(77, 17);
@@ -175,7 +175,7 @@ namespace HiroPhone
             // 
             // panelUserBorder
             // 
-            this.panelUserBorder.BackColor = System.Drawing.Color.FromArgb(240, 242, 245);
+            this.panelUserBorder.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(242)))), ((int)(((byte)(245)))));
             this.panelUserBorder.Controls.Add(this.txtUsuario);
             this.panelUserBorder.Location = new System.Drawing.Point(30, 165);
             this.panelUserBorder.Name = "panelUserBorder";
@@ -185,11 +185,11 @@ namespace HiroPhone
             // 
             // txtUsuario
             // 
-            this.txtUsuario.BackColor = System.Drawing.Color.FromArgb(240, 242, 245);
+            this.txtUsuario.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(242)))), ((int)(((byte)(245)))));
             this.txtUsuario.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txtUsuario.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtUsuario.Font = new System.Drawing.Font("Segoe UI", 11F);
-            this.txtUsuario.ForeColor = System.Drawing.Color.FromArgb(33, 37, 41);
+            this.txtUsuario.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(37)))), ((int)(((byte)(41)))));
             this.txtUsuario.Location = new System.Drawing.Point(10, 8);
             this.txtUsuario.Name = "txtUsuario";
             this.txtUsuario.Size = new System.Drawing.Size(280, 20);
@@ -199,7 +199,7 @@ namespace HiroPhone
             // 
             this.lblUsuario.AutoSize = true;
             this.lblUsuario.Font = new System.Drawing.Font("Segoe UI Semibold", 9.75F, System.Drawing.FontStyle.Bold);
-            this.lblUsuario.ForeColor = System.Drawing.Color.FromArgb(108, 117, 125);
+            this.lblUsuario.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(108)))), ((int)(((byte)(117)))), ((int)(((byte)(125)))));
             this.lblUsuario.Location = new System.Drawing.Point(30, 142);
             this.lblUsuario.Name = "lblUsuario";
             this.lblUsuario.Size = new System.Drawing.Size(54, 17);
@@ -209,7 +209,7 @@ namespace HiroPhone
             // lblSubtitulo
             // 
             this.lblSubtitulo.Font = new System.Drawing.Font("Segoe UI", 9.75F);
-            this.lblSubtitulo.ForeColor = System.Drawing.Color.FromArgb(108, 117, 125);
+            this.lblSubtitulo.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(108)))), ((int)(((byte)(117)))), ((int)(((byte)(125)))));
             this.lblSubtitulo.Location = new System.Drawing.Point(30, 80);
             this.lblSubtitulo.Name = "lblSubtitulo";
             this.lblSubtitulo.Size = new System.Drawing.Size(300, 20);
@@ -220,7 +220,7 @@ namespace HiroPhone
             // lblTitulo
             // 
             this.lblTitulo.Font = new System.Drawing.Font("Segoe UI Black", 24F, System.Drawing.FontStyle.Bold);
-            this.lblTitulo.ForeColor = System.Drawing.Color.FromArgb(24, 43, 73);
+            this.lblTitulo.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(24)))), ((int)(((byte)(43)))), ((int)(((byte)(73)))));
             this.lblTitulo.Location = new System.Drawing.Point(30, 30);
             this.lblTitulo.Name = "lblTitulo";
             this.lblTitulo.Size = new System.Drawing.Size(300, 50);
@@ -232,7 +232,7 @@ namespace HiroPhone
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.FromArgb(240, 244, 248);
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(244)))), ((int)(((byte)(248)))));
             this.ClientSize = new System.Drawing.Size(420, 450);
             this.Controls.Add(this.panelCard);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
@@ -240,6 +240,7 @@ namespace HiroPhone
             this.Name = "FormLogin";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "HiroPhone - Login";
+            this.panelTopBar.ResumeLayout(false);
             this.panelCard.ResumeLayout(false);
             this.panelCard.PerformLayout();
             this.panelPassBorder.ResumeLayout(false);

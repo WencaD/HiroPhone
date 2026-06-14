@@ -28,6 +28,9 @@ namespace HiroPhone
         /// </summary>
         private void InitializeComponent()
         {
+            this.btnCerrarCaja = new System.Windows.Forms.Button();
+            this.lblTipoComprobante = new System.Windows.Forms.Label();
+            this.cboTipoComprobante = new System.Windows.Forms.ComboBox();
             this.lblTitulo = new System.Windows.Forms.Label();
             this.panelInput = new System.Windows.Forms.Panel();
             this.btnAgregar = new System.Windows.Forms.Button();
@@ -82,6 +85,8 @@ namespace HiroPhone
             this.panelInput.Controls.Add(this.lblProducto);
             this.panelInput.Controls.Add(this.txtCliente);
             this.panelInput.Controls.Add(this.lblCliente);
+            this.panelInput.Controls.Add(this.lblTipoComprobante);
+            this.panelInput.Controls.Add(this.cboTipoComprobante);
             this.panelInput.Controls.Add(this.lblDatosVenta);
             this.panelInput.Location = new System.Drawing.Point(20, 60);
             this.panelInput.Name = "panelInput";
@@ -207,7 +212,30 @@ namespace HiroPhone
             this.lblDatosVenta.TabIndex = 0;
             this.lblDatosVenta.Text = "Detalles de Entrada";
             // 
+            // lblTipoComprobante
+            // 
+            this.lblTipoComprobante.AutoSize = true;
+            this.lblTipoComprobante.Font = new System.Drawing.Font("Segoe UI Semibold", 9.75F, System.Drawing.FontStyle.Bold);
+            this.lblTipoComprobante.ForeColor = System.Drawing.Color.FromArgb(73, 80, 87);
+            this.lblTipoComprobante.Location = new System.Drawing.Point(20, 45);
+            this.lblTipoComprobante.Name = "lblTipoComprobante";
+            this.lblTipoComprobante.Size = new System.Drawing.Size(146, 17);
+            this.lblTipoComprobante.TabIndex = 10;
+            this.lblTipoComprobante.Text = "Tipo de Comprobante:";
+            // 
+            // cboTipoComprobante
+            // 
+            this.cboTipoComprobante.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cboTipoComprobante.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.cboTipoComprobante.FormattingEnabled = true;
+            this.cboTipoComprobante.Location = new System.Drawing.Point(20, 68);
+            this.cboTipoComprobante.Name = "cboTipoComprobante";
+            this.cboTipoComprobante.Size = new System.Drawing.Size(308, 25);
+            this.cboTipoComprobante.TabIndex = 11;
+            this.cboTipoComprobante.SelectedIndexChanged += new System.EventHandler(this.cboTipoComprobante_SelectedIndexChanged);
+            // 
             // panelCart
+
             // 
             this.panelCart.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
@@ -371,12 +399,29 @@ namespace HiroPhone
             this.lblDetalleVenta.TabIndex = 0;
             this.lblDetalleVenta.Text = "Detalles del Carro";
             // 
+            // btnCerrarCaja
+            // 
+            this.btnCerrarCaja.BackColor = System.Drawing.Color.FromArgb(220, 53, 69);
+            this.btnCerrarCaja.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnCerrarCaja.FlatAppearance.BorderSize = 0;
+            this.btnCerrarCaja.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnCerrarCaja.Font = new System.Drawing.Font("Segoe UI Semibold", 9.5F, System.Drawing.FontStyle.Bold);
+            this.btnCerrarCaja.ForeColor = System.Drawing.Color.White;
+            this.btnCerrarCaja.Location = new System.Drawing.Point(620, 15);
+            this.btnCerrarCaja.Name = "btnCerrarCaja";
+            this.btnCerrarCaja.Size = new System.Drawing.Size(200, 35);
+            this.btnCerrarCaja.TabIndex = 12;
+            this.btnCerrarCaja.Text = "🔒 Arqueo y Cierre de Caja";
+            this.btnCerrarCaja.UseVisualStyleBackColor = false;
+            this.btnCerrarCaja.Click += new System.EventHandler(this.btnCerrarCaja_Click);
+            // 
             // FormVentas
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(244, 246, 249);
             this.ClientSize = new System.Drawing.Size(840, 570);
+            this.Controls.Add(this.btnCerrarCaja);
             this.Controls.Add(this.panelCart);
             this.Controls.Add(this.panelInput);
             this.Controls.Add(this.lblTitulo);
@@ -421,5 +466,8 @@ namespace HiroPhone
         private System.Windows.Forms.Button btnProcesar;
         private System.Windows.Forms.ComboBox cboMetodoPago;
         private System.Windows.Forms.Label lblMetodoPago;
+        private System.Windows.Forms.ComboBox cboTipoComprobante;
+        private System.Windows.Forms.Label lblTipoComprobante;
+        private System.Windows.Forms.Button btnCerrarCaja;
     }
 }
