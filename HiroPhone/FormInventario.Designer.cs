@@ -34,6 +34,8 @@ namespace HiroPhone
             this.btnBuscar = new System.Windows.Forms.Button();
             this.txtBuscar = new System.Windows.Forms.TextBox();
             this.lblBuscar = new System.Windows.Forms.Label();
+            this.cboFiltroCategoria = new System.Windows.Forms.ComboBox();
+            this.lblCategoria = new System.Windows.Forms.Label();
             this.dgvProductos = new System.Windows.Forms.DataGridView();
             this.panelActions = new System.Windows.Forms.Panel();
             this.btnTraslado = new System.Windows.Forms.Button();
@@ -78,6 +80,8 @@ namespace HiroPhone
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panelSearch.BackColor = System.Drawing.Color.White;
             this.panelSearch.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panelSearch.Controls.Add(this.lblCategoria);
+            this.panelSearch.Controls.Add(this.cboFiltroCategoria);
             this.panelSearch.Controls.Add(this.btnBuscar);
             this.panelSearch.Controls.Add(this.txtBuscar);
             this.panelSearch.Controls.Add(this.lblBuscar);
@@ -105,12 +109,10 @@ namespace HiroPhone
             // 
             // txtBuscar
             // 
-            this.txtBuscar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.txtBuscar.Font = new System.Drawing.Font("Segoe UI", 10F);
-            this.txtBuscar.Location = new System.Drawing.Point(140, 17);
+            this.txtBuscar.Location = new System.Drawing.Point(120, 17);
             this.txtBuscar.Name = "txtBuscar";
-            this.txtBuscar.Size = new System.Drawing.Size(520, 25);
+            this.txtBuscar.Size = new System.Drawing.Size(260, 25);
             this.txtBuscar.TabIndex = 1;
             this.txtBuscar.TextChanged += new System.EventHandler(this.txtBuscar_TextChanged);
             // 
@@ -121,9 +123,30 @@ namespace HiroPhone
             this.lblBuscar.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(73)))), ((int)(((byte)(80)))), ((int)(((byte)(87)))));
             this.lblBuscar.Location = new System.Drawing.Point(15, 20);
             this.lblBuscar.Name = "lblBuscar";
-            this.lblBuscar.Size = new System.Drawing.Size(106, 17);
+            this.lblBuscar.Size = new System.Drawing.Size(53, 17);
             this.lblBuscar.TabIndex = 0;
-            this.lblBuscar.Text = "Filtrar Producto:";
+            this.lblBuscar.Text = "Buscar:";
+            // 
+            // lblCategoria
+            // 
+            this.lblCategoria.AutoSize = true;
+            this.lblCategoria.Font = new System.Drawing.Font("Segoe UI Semibold", 9.75F, System.Drawing.FontStyle.Bold);
+            this.lblCategoria.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(73)))), ((int)(((byte)(80)))), ((int)(((byte)(87)))));
+            this.lblCategoria.Location = new System.Drawing.Point(395, 20);
+            this.lblCategoria.Name = "lblCategoria";
+            this.lblCategoria.Size = new System.Drawing.Size(70, 17);
+            this.lblCategoria.TabIndex = 3;
+            this.lblCategoria.Text = "Categoría:";
+            // 
+            // cboFiltroCategoria
+            // 
+            this.cboFiltroCategoria.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cboFiltroCategoria.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.cboFiltroCategoria.Location = new System.Drawing.Point(475, 17);
+            this.cboFiltroCategoria.Name = "cboFiltroCategoria";
+            this.cboFiltroCategoria.Size = new System.Drawing.Size(180, 25);
+            this.cboFiltroCategoria.TabIndex = 4;
+            this.cboFiltroCategoria.SelectedIndexChanged += new System.EventHandler(this.cboFiltroCategoria_SelectedIndexChanged);
             // 
             // dgvProductos
             // 
@@ -259,5 +282,7 @@ namespace HiroPhone
         private System.Windows.Forms.Button btnNuevoProducto;
         private System.Windows.Forms.Button btnActualizarPrecio;
         private System.Windows.Forms.Button btnMantenimientos;
+        private System.Windows.Forms.Label lblCategoria;
+        private System.Windows.Forms.ComboBox cboFiltroCategoria;
     }
 }

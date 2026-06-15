@@ -190,12 +190,14 @@ CREATE PROCEDURE sp_InsertarCabeceraVenta
     @idCliente INT,
     @idEmpleado INT,
     @idMetodo INT,
-    @idTipoComprobante INT
+    @idTipoComprobante INT,
+    @montoEfectivo DECIMAL(18,2) = NULL,
+    @montoTarjeta DECIMAL(18,2) = NULL
 AS
 BEGIN
     SET NOCOUNT ON;
-    INSERT INTO Venta (fecha_venta, serie_comprobante, correlativo_diario, subtotal, igv, total_venta, id_cliente, id_empleado, id_metodo_pago, id_tipo_comprobante, id_caja)
-    VALUES (GETDATE(), @serie, @correlativo, @subtotal, @igv, @total, @idCliente, @idEmpleado, @idMetodo, @idTipoComprobante, 1);
+    INSERT INTO Venta (fecha_venta, serie_comprobante, correlativo_diario, subtotal, igv, total_venta, id_cliente, id_empleado, id_metodo_pago, id_tipo_comprobante, id_caja, monto_efectivo, monto_tarjeta)
+    VALUES (GETDATE(), @serie, @correlativo, @subtotal, @igv, @total, @idCliente, @idEmpleado, @idMetodo, @idTipoComprobante, 1, @montoEfectivo, @montoTarjeta);
     
     SELECT SCOPE_IDENTITY() AS id_venta;
 END;

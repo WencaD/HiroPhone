@@ -53,6 +53,54 @@
     <Compile Include="FormLogin.Designer.cs">
       <DependentUpon>FormLogin.cs</DependentUpon>
     </Compile>
+    <Compile Include="FormNuevoProductoDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormNuevoProductoDialog.Designer.cs">
+      <DependentUpon>FormNuevoProductoDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormActualizarPrecioDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormActualizarPrecioDialog.Designer.cs">
+      <DependentUpon>FormActualizarPrecioDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormAjustarStockDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormAjustarStockDialog.Designer.cs">
+      <DependentUpon>FormAjustarStockDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormTrasladoDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormTrasladoDialog.Designer.cs">
+      <DependentUpon>FormTrasladoDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormMantenimientosDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormMantenimientosDialog.Designer.cs">
+      <DependentUpon>FormMantenimientosDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormCierreCajaDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormCierreCajaDialog.Designer.cs">
+      <DependentUpon>FormCierreCajaDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormPagoMixtoDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormPagoMixtoDialog.Designer.cs">
+      <DependentUpon>FormPagoMixtoDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormDetalleVentaDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormDetalleVentaDialog.Designer.cs">
+      <DependentUpon>FormDetalleVentaDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="FormPrincipal.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -93,11 +141,23 @@
     <Compile Include="UserSession.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="FormActualizarPrecioDialog.resx">
+      <DependentUpon>FormActualizarPrecioDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormAjustarStockDialog.resx">
+      <DependentUpon>FormAjustarStockDialog.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FormInventario.resx">
       <DependentUpon>FormInventario.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormLogin.resx">
       <DependentUpon>FormLogin.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormMantenimientosDialog.resx">
+      <DependentUpon>FormMantenimientosDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormTrasladoDialog.resx">
+      <DependentUpon>FormTrasladoDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

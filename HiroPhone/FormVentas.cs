@@ -18,21 +18,60 @@ namespace HiroPhone
 
         private void FormVentas_Load(object sender, EventArgs e)
         {
-            CargarProductos();
+            CargarCategorias();
             CargarMetodosPago();
             CargarTiposComprobante();
             InicializarCarrito();
+            AjustarDiseñoGrid();
+            CargarHistorialVentas();
         }
 
-        private void CargarProductos()
+        private void CargarCategorias()
         {
             try
             {
                 using (SqlConnection cn = Conexion.Conectar())
                 {
                     cn.Open();
-                    using (SqlCommand cmd = new SqlCommand("SELECT nombre_producto, precio_venta FROM Producto", cn))
+                    using (SqlCommand cmd = new SqlCommand("SELECT id_categoria, nombre_categoria FROM Categoria_Producto ORDER BY nombre_categoria", cn))
                     {
+                        using (SqlDataAdapter da = new SqlDataAdapter(cmd))
+                        {
+                            DataTable dt = new DataTable();
+                            da.Fill(dt);
+                            
+                            cboCategoria.SelectedIndexChanged -= cboCategoria_SelectedIndexChanged;
+                            cboCategoria.DataSource = dt;
+                            cboCategoria.DisplayMember = "nombre_categoria";
+                            cboCategoria.ValueMember = "id_categoria";
+                            cboCategoria.SelectedIndexChanged += cboCategoria_SelectedIndexChanged;
+                        }
+                    }
+                }
+
+                if (cboCategoria.Items.Count > 0)
+                {
+                    cboCategoria.SelectedIndex = 0;
+                    cboCategoria_SelectedIndexChanged(null, null);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al cargar categorías desde SQL Server:\n" + ex.Message, 
+                                "Error de Base de Datos", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void CargarProductosPorCategoria(int idCategoria)
+        {
+            try
+            {
+                using (SqlConnection cn = Conexion.Conectar())
+                {
+                    cn.Open();
+                    using (SqlCommand cmd = new SqlCommand("SELECT nombre_producto, precio_venta FROM Producto WHERE id_categoria = @IdCat", cn))
+                    {
+                        cmd.Parameters.AddWithValue("@IdCat", idCategoria);
                         using (SqlDataAdapter da = new SqlDataAdapter(cmd))
                         {
                             DataTable dt = new DataTable();
@@ -50,13 +89,30 @@ namespace HiroPhone
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error al cargar productos desde SQL Server:\n" + ex.Message, 
+                MessageBox.Show("Error al cargar productos por categoría desde SQL Server:\n" + ex.Message, 
                                 "Error de Base de Datos", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            
+
             if (cboProducto.Items.Count > 0)
             {
                 cboProducto.SelectedIndex = 0;
+            }
+            else
+            {
+                cboProducto.Text = string.Empty;
+                txtPrecio.Clear();
+            }
+        }
+
+        private void cboCategoria_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cboCategoria.SelectedValue != null && cboCategoria.SelectedValue is int idCat)
+            {
+                CargarProductosPorCategoria(idCat);
+            }
+            else if (cboCategoria.SelectedValue != null && int.TryParse(cboCategoria.SelectedValue.ToString(), out int idCatParsed))
+            {
+                CargarProductosPorCategoria(idCatParsed);
             }
         }
 
@@ -166,6 +222,12 @@ namespace HiroPhone
             dgvDetalle.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgvDetalle.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvDetalle.RowHeadersVisible = false;
+            dgvDetalle.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(245, 247, 250);
+
+            if (dgvDetalle.Columns.Contains("Precio Unit."))
+                dgvDetalle.Columns["Precio Unit."].DefaultCellStyle.Format = "'S/.' #,##0.00";
+            if (dgvDetalle.Columns.Contains("Subtotal"))
+                dgvDetalle.Columns["Subtotal"].DefaultCellStyle.Format = "'S/.' #,##0.00";
         }
 
         private void cboProducto_SelectedIndexChanged(object sender, EventArgs e)
@@ -338,6 +400,37 @@ namespace HiroPhone
                 idMetodoPago = 1;
             }
 
+            double montoEfectivo = 0.0;
+            double montoTarjeta = 0.0;
+
+            if (idMetodoPago == 4) // Pago Mixto
+            {
+                using (var diag = new FormPagoMixtoDialog(totalAcumulado))
+                {
+                    if (diag.ShowDialog() != DialogResult.OK)
+                    {
+                        return;
+                    }
+                    montoEfectivo = diag.MontoEfectivo;
+                    montoTarjeta = diag.MontoTarjeta;
+                }
+            }
+            else if (idMetodoPago == 1) // Efectivo Soles
+            {
+                montoEfectivo = totalAcumulado;
+                montoTarjeta = 0.0;
+            }
+            else if (idMetodoPago == 2) // Tarjeta
+            {
+                montoEfectivo = 0.0;
+                montoTarjeta = totalAcumulado;
+            }
+            else // Transferencia u otros
+            {
+                montoEfectivo = 0.0;
+                montoTarjeta = 0.0;
+            }
+
             try
             {
                 int idCliente = 0;
@@ -386,6 +479,8 @@ namespace HiroPhone
                                 cmdVenta.Parameters.AddWithValue("@idEmpleado", idEmpleado);
                                 cmdVenta.Parameters.AddWithValue("@idMetodo", idMetodoPago);
                                 cmdVenta.Parameters.AddWithValue("@idTipoComprobante", idTipoComprobante);
+                                cmdVenta.Parameters.AddWithValue("@montoEfectivo", (decimal)montoEfectivo);
+                                cmdVenta.Parameters.AddWithValue("@montoTarjeta", (decimal)montoTarjeta);
                                 idVenta = Convert.ToInt32(cmdVenta.ExecuteScalar());
                             }
 
@@ -470,8 +565,8 @@ namespace HiroPhone
                 using (SqlConnection cn = Conexion.Conectar())
                 {
                     cn.Open();
-                    string qEfectivo = "SELECT ISNULL(SUM(total_venta), 0) FROM Venta WHERE id_caja = 1 AND id_metodo_pago = 1 AND CAST(fecha_venta AS DATE) = CAST(GETDATE() AS DATE)";
-                    string qTarjeta = "SELECT ISNULL(SUM(total_venta), 0) FROM Venta WHERE id_caja = 1 AND id_metodo_pago = 2 AND CAST(fecha_venta AS DATE) = CAST(GETDATE() AS DATE)";
+                    string qEfectivo = "SELECT ISNULL(SUM(monto_efectivo), 0) FROM Venta WHERE id_caja = 1 AND CAST(fecha_venta AS DATE) = CAST(GETDATE() AS DATE)";
+                    string qTarjeta = "SELECT ISNULL(SUM(monto_tarjeta), 0) FROM Venta WHERE id_caja = 1 AND CAST(fecha_venta AS DATE) = CAST(GETDATE() AS DATE)";
                     string qTransferencia = "SELECT ISNULL(SUM(total_venta), 0) FROM Venta WHERE id_caja = 1 AND id_metodo_pago = 3 AND CAST(fecha_venta AS DATE) = CAST(GETDATE() AS DATE)";
 
                     using (SqlCommand cmd = new SqlCommand(qEfectivo, cn))
@@ -499,188 +594,122 @@ namespace HiroPhone
                                 "Error de Base de Datos", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-    }
 
-    public class FormCierreCajaDialog : Form
-    {
-        private double sysEfectivo;
-        private double sysTarjeta;
-        private double sysTransf;
-        private double sysTotal;
-
-        private TextBox txtFisicoEfectivo;
-        private TextBox txtFisicoTarjeta;
-        private TextBox txtFisicoTransf;
-        private Label lblTotalSistema;
-        private Label lblTotalFisico;
-        private Label lblDiferencia;
-        private Button btnConfirmar;
-
-        public FormCierreCajaDialog(double efectivo, double tarjeta, double transferencia)
+        private void rdbFiltro_CheckedChanged(object sender, EventArgs e)
         {
-            this.sysEfectivo = efectivo;
-            this.sysTarjeta = tarjeta;
-            this.sysTransf = transferencia;
-            this.sysTotal = efectivo + tarjeta + transferencia;
-
-            InitializeComponents();
-            ActualizarTotales();
+            if (((System.Windows.Forms.RadioButton)sender).Checked)
+                CargarHistorialVentas();
         }
 
-        private void InitializeComponents()
+        private void CargarHistorialVentas()
         {
-            this.Text = "Arqueo y Cierre de Caja";
-            this.Size = new Size(450, 480);
-            this.FormBorderStyle = FormBorderStyle.FixedDialog;
-            this.MaximizeBox = false;
-            this.MinimizeBox = false;
-            this.StartPosition = FormStartPosition.CenterParent;
-            this.BackColor = Color.White;
-            this.Font = new Font("Segoe UI", 9.5F);
 
-            // Title
-            Label lblTitle = new Label
+            string query = "";
+            if (rdbDia.Checked)
             {
-                Text = "Cierre de Caja Diario",
-                Font = new Font("Segoe UI Black", 14F, FontStyle.Bold),
-                ForeColor = Color.FromArgb(24, 43, 73),
-                Location = new Point(20, 15),
-                Size = new Size(400, 30)
-            };
-            this.Controls.Add(lblTitle);
-
-            // Headers
-            Label lblHeaderMetodo = new Label { Text = "Método", Font = new Font("Segoe UI", 9.5F, FontStyle.Bold), Location = new Point(25, 65), Size = new Size(130, 20) };
-            Label lblHeaderSistema = new Label { Text = "Sistema (S/.)", Font = new Font("Segoe UI", 9.5F, FontStyle.Bold), Location = new Point(165, 65), Size = new Size(110, 20), TextAlign = ContentAlignment.TopRight };
-            Label lblHeaderFisico = new Label { Text = "Físico (S/.)", Font = new Font("Segoe UI", 9.5F, FontStyle.Bold), Location = new Point(295, 65), Size = new Size(110, 20), TextAlign = ContentAlignment.TopRight };
-            this.Controls.Add(lblHeaderMetodo);
-            this.Controls.Add(lblHeaderSistema);
-            this.Controls.Add(lblHeaderFisico);
-
-            // Row 1: Efectivo
-            Label lblEfectivo = new Label { Text = "Efectivo:", Location = new Point(25, 100), Size = new Size(130, 25), TextAlign = ContentAlignment.MiddleLeft };
-            Label lblSysEfectivo = new Label { Text = sysEfectivo.ToString("N2"), Location = new Point(165, 100), Size = new Size(110, 25), TextAlign = ContentAlignment.MiddleRight };
-            txtFisicoEfectivo = new TextBox { Location = new Point(295, 100), Size = new Size(110, 25), TextAlign = HorizontalAlignment.Right, Text = "0.00" };
-            txtFisicoEfectivo.TextChanged += (s, e) => ActualizarTotales();
-            this.Controls.Add(lblEfectivo);
-            this.Controls.Add(lblSysEfectivo);
-            this.Controls.Add(txtFisicoEfectivo);
-
-            // Row 2: Tarjeta
-            Label lblTarjeta = new Label { Text = "Tarjetas:", Location = new Point(25, 140), Size = new Size(130, 25), TextAlign = ContentAlignment.MiddleLeft };
-            Label lblSysTarjeta = new Label { Text = sysTarjeta.ToString("N2"), Location = new Point(165, 140), Size = new Size(110, 25), TextAlign = ContentAlignment.MiddleRight };
-            txtFisicoTarjeta = new TextBox { Location = new Point(295, 140), Size = new Size(110, 25), TextAlign = HorizontalAlignment.Right, Text = "0.00" };
-            txtFisicoTarjeta.TextChanged += (s, e) => ActualizarTotales();
-            this.Controls.Add(lblTarjeta);
-            this.Controls.Add(lblSysTarjeta);
-            this.Controls.Add(txtFisicoTarjeta);
-
-            // Row 3: Transferencia
-            Label lblTransf = new Label { Text = "Yape / Plin:", Location = new Point(25, 180), Size = new Size(130, 25), TextAlign = ContentAlignment.MiddleLeft };
-            Label lblSysTransf = new Label { Text = sysTransf.ToString("N2"), Location = new Point(165, 180), Size = new Size(110, 25), TextAlign = ContentAlignment.MiddleRight };
-            txtFisicoTransf = new TextBox { Location = new Point(295, 180), Size = new Size(110, 25), TextAlign = HorizontalAlignment.Right, Text = "0.00" };
-            txtFisicoTransf.TextChanged += (s, e) => ActualizarTotales();
-            this.Controls.Add(lblTransf);
-            this.Controls.Add(lblSysTransf);
-            this.Controls.Add(txtFisicoTransf);
-
-            // Separator line
-            Panel line = new Panel { BackColor = Color.FromArgb(220, 224, 230), Location = new Point(25, 225), Size = new Size(380, 2) };
-            this.Controls.Add(line);
-
-            // Totales
-            Label lblTotalLabel = new Label { Text = "Total General:", Font = new Font("Segoe UI", 9.5F, FontStyle.Bold), Location = new Point(25, 240), Size = new Size(130, 25), TextAlign = ContentAlignment.MiddleLeft };
-            lblTotalSistema = new Label { Text = sysTotal.ToString("N2"), Font = new Font("Segoe UI", 9.5F, FontStyle.Bold), Location = new Point(165, 240), Size = new Size(110, 25), TextAlign = ContentAlignment.MiddleRight };
-            lblTotalFisico = new Label { Text = "0.00", Font = new Font("Segoe UI", 9.5F, FontStyle.Bold), Location = new Point(295, 240), Size = new Size(110, 25), TextAlign = ContentAlignment.MiddleRight };
-            this.Controls.Add(lblTotalLabel);
-            this.Controls.Add(lblTotalSistema);
-            this.Controls.Add(lblTotalFisico);
-
-            // Diferencia
-            Label lblDiferenciaLabel = new Label { Text = "Diferencia (Arqueo):", Font = new Font("Segoe UI", 9.5F, FontStyle.Bold), Location = new Point(25, 280), Size = new Size(130, 25), TextAlign = ContentAlignment.MiddleLeft };
-            lblDiferencia = new Label { Text = "0.00", Font = new Font("Segoe UI", 10F, FontStyle.Bold), Location = new Point(295, 280), Size = new Size(110, 25), TextAlign = ContentAlignment.MiddleRight };
-            this.Controls.Add(lblDiferenciaLabel);
-            this.Controls.Add(lblDiferencia);
-
-            // Confirm Button
-            btnConfirmar = new Button
-            {
-                Text = "💾 Confirmar y Registrar Cierre",
-                BackColor = Color.FromArgb(40, 167, 69),
-                ForeColor = Color.White,
-                FlatStyle = FlatStyle.Flat,
-                Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold),
-                Location = new Point(25, 350),
-                Size = new Size(380, 45),
-                Cursor = Cursors.Hand
-            };
-            btnConfirmar.FlatAppearance.BorderSize = 0;
-            btnConfirmar.Click += btnConfirmar_Click;
-            this.Controls.Add(btnConfirmar);
-        }
-
-        private void ActualizarTotales()
-        {
-            double.TryParse(txtFisicoEfectivo.Text, out double fisEf);
-            double.TryParse(txtFisicoTarjeta.Text, out double fisTar);
-            double.TryParse(txtFisicoTransf.Text, out double fisTra);
-
-            double totalFis = fisEf + fisTar + fisTra;
-            double dif = totalFis - sysTotal;
-
-            lblTotalFisico.Text = totalFis.ToString("N2");
-            lblDiferencia.Text = dif.ToString("N2");
-
-            if (dif < 0)
-            {
-                lblDiferencia.ForeColor = Color.Red;
+                query = @"
+                    SELECT 
+                        v.id_venta AS [ID],
+                        v.serie_comprobante + '-' + RIGHT('00000000' + CAST(v.correlativo_diario AS VARCHAR), 8) AS [Comprobante],
+                        v.fecha_venta AS [Fecha],
+                        c.nombre_o_razon_social AS [Cliente],
+                        mp.nombre_metodo_pago AS [Método Pago],
+                        v.monto_efectivo AS [Efectivo],
+                        v.monto_tarjeta AS [Tarjeta],
+                        v.total_venta AS [Total]
+                    FROM Venta v
+                    INNER JOIN Cliente c ON v.id_cliente = c.id_cliente
+                    INNER JOIN Metodo_Pago mp ON v.id_metodo_pago = mp.id_metodo_pago
+                    WHERE CAST(v.fecha_venta AS DATE) = CAST(GETDATE() AS DATE)
+                    ORDER BY v.fecha_venta DESC";
             }
-            else if (dif > 0)
+            else if (rdbSemana.Checked)
             {
-                lblDiferencia.ForeColor = Color.Green;
+                query = @"
+                    SELECT 
+                        v.id_venta AS [ID],
+                        v.serie_comprobante + '-' + RIGHT('00000000' + CAST(v.correlativo_diario AS VARCHAR), 8) AS [Comprobante],
+                        v.fecha_venta AS [Fecha],
+                        c.nombre_o_razon_social AS [Cliente],
+                        mp.nombre_metodo_pago AS [Método Pago],
+                        v.monto_efectivo AS [Efectivo],
+                        v.monto_tarjeta AS [Tarjeta],
+                        v.total_venta AS [Total]
+                    FROM Venta v
+                    INNER JOIN Cliente c ON v.id_cliente = c.id_cliente
+                    INNER JOIN Metodo_Pago mp ON v.id_metodo_pago = mp.id_metodo_pago
+                    WHERE v.fecha_venta >= DATEADD(day, -7, GETDATE())
+                    ORDER BY v.fecha_venta DESC";
             }
-            else
+            else if (rdbMes.Checked)
             {
-                lblDiferencia.ForeColor = Color.Black;
+                query = @"
+                    SELECT 
+                        v.id_venta AS [ID],
+                        v.serie_comprobante + '-' + RIGHT('00000000' + CAST(v.correlativo_diario AS VARCHAR), 8) AS [Comprobante],
+                        v.fecha_venta AS [Fecha],
+                        c.nombre_o_razon_social AS [Cliente],
+                        mp.nombre_metodo_pago AS [Método Pago],
+                        v.monto_efectivo AS [Efectivo],
+                        v.monto_tarjeta AS [Tarjeta],
+                        v.total_venta AS [Total]
+                    FROM Venta v
+                    INNER JOIN Cliente c ON v.id_cliente = c.id_cliente
+                    INNER JOIN Metodo_Pago mp ON v.id_metodo_pago = mp.id_metodo_pago
+                    WHERE v.fecha_venta >= DATEADD(month, -1, GETDATE())
+                    ORDER BY v.fecha_venta DESC";
             }
-        }
-
-        private void btnConfirmar_Click(object sender, EventArgs e)
-        {
-            double.TryParse(txtFisicoEfectivo.Text, out double fisEf);
-            double.TryParse(txtFisicoTarjeta.Text, out double fisTar);
-            double.TryParse(txtFisicoTransf.Text, out double fisTra);
-            double totalFis = fisEf + fisTar + fisTra;
-            double dif = totalFis - sysTotal;
 
             try
             {
-                using (SqlConnection cn = Conexion.Conectar())
-                {
-                    cn.Open();
-                    string query = @"
-                        INSERT INTO Cierre_Caja (caja_id_caja, fecha_cierre, monto_final_sistema, monto_final_fisico, diferencia, total_efectivo, total_dolares, total_tarjeta, total_transferencia)
-                        VALUES (1, GETDATE(), @SysTotal, @FisTotal, @Dif, @FisEf, 0, @FisTar, @FisTra)";
+                DataTable dt = Conexion.ExecuteQuery(query);
+                dgvHistorialVentas.DataSource = dt;
 
-                    using (SqlCommand cmd = new SqlCommand(query, cn))
-                    {
-                        cmd.Parameters.AddWithValue("@SysTotal", (decimal)sysTotal);
-                        cmd.Parameters.AddWithValue("@FisTotal", (decimal)totalFis);
-                        cmd.Parameters.AddWithValue("@Dif", (decimal)dif);
-                        cmd.Parameters.AddWithValue("@FisEf", (decimal)fisEf);
-                        cmd.Parameters.AddWithValue("@FisTar", (decimal)fisTar);
-                        cmd.Parameters.AddWithValue("@FisTra", (decimal)fisTra);
-                        cmd.ExecuteNonQuery();
-                    }
-                }
+                // Adjust grid column settings
+                if (dgvHistorialVentas.Columns.Contains("ID"))
+                    dgvHistorialVentas.Columns["ID"].Visible = false;
 
-                MessageBox.Show("El Cierre de Caja se ha registrado correctamente en SQL Server.", "Cierre Exitoso", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                this.DialogResult = DialogResult.OK;
-                this.Close();
+                if (dgvHistorialVentas.Columns.Contains("Fecha"))
+                    dgvHistorialVentas.Columns["Fecha"].DefaultCellStyle.Format = "dd/MM/yyyy HH:mm:ss";
+
+                if (dgvHistorialVentas.Columns.Contains("Efectivo"))
+                    dgvHistorialVentas.Columns["Efectivo"].DefaultCellStyle.Format = "'S/.' #,##0.00";
+
+                if (dgvHistorialVentas.Columns.Contains("Tarjeta"))
+                    dgvHistorialVentas.Columns["Tarjeta"].DefaultCellStyle.Format = "'S/.' #,##0.00";
+
+                if (dgvHistorialVentas.Columns.Contains("Total"))
+                    dgvHistorialVentas.Columns["Total"].DefaultCellStyle.Format = "'S/.' #,##0.00";
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error al guardar el cierre de caja:\n" + ex.Message, "Error de BD", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Error al cargar historial de ventas:\n" + ex.Message, "Error de BD", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void dgvHistorialVentas_DoubleClick(object sender, EventArgs e)
+        {
+            if (dgvHistorialVentas.CurrentRow != null)
+            {
+                try
+                {
+                    var row = dgvHistorialVentas.CurrentRow;
+                    int idVenta = Convert.ToInt32(row.Cells["ID"].Value);
+                    string comprobante = row.Cells["Comprobante"].Value.ToString();
+                    string cliente = row.Cells["Cliente"].Value.ToString();
+                    string fecha = Convert.ToDateTime(row.Cells["Fecha"].Value).ToString("dd/MM/yyyy HH:mm:ss");
+                    string metodo = row.Cells["Método Pago"].Value.ToString();
+                    double total = Convert.ToDouble(row.Cells["Total"].Value);
+
+                    using (var diag = new FormDetalleVentaDialog(idVenta, comprobante, cliente, fecha, metodo, total))
+                    {
+                        diag.ShowDialog();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error al abrir detalles de la venta:\n" + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
         }
     }

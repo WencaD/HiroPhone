@@ -73,8 +73,8 @@ namespace HiroPhone
                     SELECT TOP 100
                         e.nombres_empleado + ' ' + e.apellidos_Paterno AS [Empleado],
                         CONVERT(VARCHAR(10), a.fecha_asistencia, 103) AS [Fecha],
-                        CONVERT(VARCHAR(8), a.hora_entrada, 108) AS [Hora Entrada],
-                        ISNULL(CONVERT(VARCHAR(8), a.hora_salida, 108), '--:--') AS [Hora Salida],
+                        CONVERT(VARCHAR(8), a.hora_entrada, 108) AS [Ingreso],
+                        ISNULL(CONVERT(VARCHAR(8), a.hora_salida, 108), '--:--') AS [Salida],
                         a.estado_asistencia AS [Estado]
                     FROM 
                         Asistencia a

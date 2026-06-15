@@ -108,7 +108,7 @@ namespace HiroPhone
             botonActivo.ForeColor = Color.White;
 
             // Actualizar el título de la cabecera
-            lblModuloActivo.Text = btn.Text.Substring(2); // Eliminar el emoji inicial
+            lblModuloActivo.Text = btn.Text.Trim();
         }
 
         // Eventos de clic de la barra lateral
